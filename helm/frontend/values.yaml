@@ -1,0 +1,28 @@
+replicaCount: 2
+
+image:
+  repository: <your-aws-account-id>.dkr.ecr.<region>.amazonaws.com/yasn-frontend
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+env:
+  - name: REACT_APP_API_BASE_URL
+    value: "https://your-api-gateway-id.execute-api.<region>.amazonaws.com/prod"
+
+resources:
+  requests:
+    cpu: "50m"
+    memory: "128Mi"
+  limits:
+    cpu: "300m"
+    memory: "256Mi"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70

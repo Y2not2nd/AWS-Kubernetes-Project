@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: yasn-backend-servicemonitor
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: yasn-backend
+  namespaceSelector:
+    matchNames:
+      - backend-ns
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

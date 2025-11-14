@@ -1,0 +1,37 @@
+image:
+repository: <ECR_URL>/yasn-backend
+tag: "latest"
+pullPolicy: IfNotPresent
+
+
+env:
+DB_HOST: "yasn-rds-endpoint"
+DB_USER: "postgres"
+DB_PASSWORD: "changeme"
+DB_NAME: "yasn_tickets"
+REDIS_HOST: "yasn-redis"
+REDIS_PORT: "6379"
+DYNAMODB_TABLE_NAME: "yasn_ticket_metadata"
+AWS_REGION: "eu-west-1"
+COGNITO_USER_POOL_ID: "pool-id"
+COGNITO_CLIENT_ID: "client-id"
+
+
+service:
+type: ClusterIP
+port: 8080
+
+
+resources:
+requests:
+cpu: "100m"
+memory: "256Mi"
+limits:
+ memory: "512Mi"
+
+
+hpa:
+enabled: true
+minReplicas: 2
+maxReplicas: 5
+cpuTarget: 70

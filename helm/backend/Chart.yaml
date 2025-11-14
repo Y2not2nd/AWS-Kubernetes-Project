@@ -1,0 +1,5 @@
+apiVersion: v2
+name: yasn-backend
+version: 1.0.0
+appVersion: 1.0.0
+description: Backend Flask API for Yasn ticket system

@@ -1,0 +1,30 @@
+replicaCount: 1
+
+image:
+  repository: <your-aws-account-id>.dkr.ecr.<region>.amazonaws.com/yasn-worker
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+env:
+  - name: REDIS_HOST
+    valueFrom:
+      secretKeyRef:
+        name: yasn-worker-secrets
+        key: redis_host
+  - name: REDIS_PORT
+    value: "6379"
+  - name: REDIS_QUEUE_NAME
+    value: "yasn_ticket_jobs"
+  - name: POLL_INTERVAL_SECONDS
+    value: "2"
+
+resources:
+  requests:
+    cpu: "30m"
+    memory: "64Mi"
+  limits:
+    cpu: "200m"
+    memory: "256Mi"
+
+autoscaling:
+  enabled: false

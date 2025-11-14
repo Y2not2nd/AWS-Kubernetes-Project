@@ -1,0 +1,17 @@
+adminUser: "admin"
+adminPassword: "admin1234"
+
+service:
+  type: LoadBalancer
+
+resources:
+  requests:
+    cpu: "50m"
+    memory: "256Mi"
+  limits:
+    cpu: "300m"
+    memory: "512Mi"
+
+sidecar:
+  dashboards:
+    enabled: true

@@ -1,0 +1,75 @@
+name: yasn-ci-cd
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: eu-west-1
+
+      - name: Login to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build backend image
+        run: |
+          docker build -t yasn-backend:latest services/backend
+          docker tag yasn-backend:latest ${{ steps.ecr.outputs.registry }}/yasn-backend:latest
+          docker push ${{ steps.ecr.outputs.registry }}/yasn-backend:latest
+
+      - name: Build worker image
+        run: |
+          docker build -t yasn-worker:latest services/worker
+          docker tag yasn-worker:latest ${{ steps.ecr.outputs.registry }}/yasn-worker:latest
+          docker push ${{ steps.ecr.outputs.registry }}/yasn-worker:latest
+
+      - name: Build frontend image
+        run: |
+          docker build -t yasn-frontend:latest services/frontend
+          docker tag yasn-frontend:latest ${{ steps.ecr.outputs.registry }}/yasn-frontend:latest
+          docker push ${{ steps.ecr.outputs.registry }}/yasn-frontend:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: eu-west-1
+
+      - name: Update kubeconfig for EKS
+        run: |
+          aws eks update-kubeconfig --name yasn-eks --region eu-west-1
+
+      - name: Deploy backend via Helm
+        run: |
+          helm upgrade --install yasn-backend ./helm/backend -n backend-ns
+
+      - name: Deploy worker via Helm
+        run: |
+          helm upgrade --install yasn-worker ./helm/worker -n backend-ns
+
+      - name: Deploy frontend via Helm
+        run: |
+          helm upgrade --install yasn-frontend ./helm/frontend -n frontend-ns

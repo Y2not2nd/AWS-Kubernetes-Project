@@ -1,0 +1,26 @@
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelector: {}
+    podMonitorSelector: {}
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+
+alertmanager:
+  enabled: false
+
+kube-state-metrics:
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "128Mi"
+
+nodeExporter:
+  resources:
+    requests:
+      cpu: "30m"
+      memory: "64Mi"
