@@ -20,13 +20,11 @@ provider "aws" {
 module "yasn_network" {
   source = "./network"
 
-  vpc_cidr        = var.vpc_cidr
-  public_subnets  = var.public_subnets
-  private_subnets = var.private_subnets
-
-  tags = {
-    Project = "yasn"
-  }
+  vpc_cidr           = var.vpc_cidr
+  public_subnets     = var.public_subnets
+  private_subnets    = var.private_subnets
+  availability_zones = var.availability_zones
+  tags               = var.tags
 }
 
 ##########################################
@@ -36,7 +34,7 @@ module "yasn_network" {
 module "yasn_eks" {
   source = "./eks"
 
-  cluster_name = var.yasn_cluster_name
+  cluster_name   = var.yasn_cluster_name
   cluster_version = var.eks_version
 
   vpc_id     = module.yasn_network.vpc_id
@@ -49,9 +47,7 @@ module "yasn_eks" {
   min_size     = var.eks_min_size
   max_size     = var.eks_max_size
 
-  tags = {
-    Project = "yasn"
-  }
+  tags = var.tags
 }
 
 ##########################################
