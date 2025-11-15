@@ -29,17 +29,17 @@ resource "aws_iam_role" "yasn_external_secrets_role" {
   name = "yasn-external-secrets-role"
 
   assume_role_policy = jsonencode({
-    Version = "2012-10-17",
+    Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow",
+        Effect = "Allow"
         Principal = {
           Federated = aws_iam_openid_connect_provider.yasn_eks_oidc.arn
-        },
-        Action = "sts:AssumeRoleWithWebIdentity",
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringEquals = {
-            "${replace(aws_eks_cluster.yasn.identity[0].oidc[0].issuer, "https://", "")}:sub" : "system:serviceaccount:backend-ns:yasn-external-secrets-sa"
+            "${replace(aws_eks_cluster.yasn.identity[0].oidc[0].issuer, "https://", "")}:sub" = "system:serviceaccount:backend-ns:yasn-external-secrets-sa"
           }
         }
       }

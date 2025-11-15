@@ -1,10 +1,16 @@
 ##########################################
 # GLOBAL
 ##########################################
- 
+
 variable "aws_region" {
   type    = string
   default = "us-east-1"
+}
+
+variable "availability_zones" {
+  type        = list(string)
+  description = "Availability zones to use for the VPC"
+  default     = []
 }
 
 ##########################################
