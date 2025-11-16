@@ -11,6 +11,11 @@ variable "db_password" {
   sensitive = true
 }
 
+variable "db_engine_version" {
+  type        = string
+  description = "PostgreSQL engine version"
+}
+
 variable "subnet_ids" {
   type = list(string)
 }

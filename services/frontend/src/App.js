@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || "/api";
 const appTitle = "Yasn Ticket System";
 
 function App() {

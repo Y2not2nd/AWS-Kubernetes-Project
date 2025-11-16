@@ -74,6 +74,7 @@ module "yasn_rds" {
   db_name     = var.rds_name
   db_user     = var.rds_user
   db_password = var.rds_password
+  db_engine_version = var.rds_engine_version
 
   subnet_ids = module.yasn_network.private_subnet_ids
   vpc_id     = module.yasn_network.vpc_id

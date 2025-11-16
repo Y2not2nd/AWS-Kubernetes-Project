@@ -6,7 +6,7 @@ resource "aws_db_subnet_group" "yasn_rds_subnet_group" {
 resource "aws_db_instance" "yasn_rds" {
   allocated_storage    = 20
   engine               = "postgres"
-  engine_version       = "15.3"
+  engine_version       = var.db_engine_version
   instance_class       = "db.t3.micro"
   db_name              = var.db_name
   username             = var.db_user
