@@ -37,6 +37,10 @@ variable "eks_desired_size" {
   default = 2
 }
 
+
+variable "backend_ingress_url" {
+  type = string
+}
 variable "eks_min_size" {
   type    = number
   default = 1
