@@ -34,20 +34,20 @@ module "yasn_network" {
 module "yasn_eks" {
   source = "./eks"
 
-  cluster_name   = var.yasn_cluster_name
-  cluster_version = var.eks_version
+  cluster_name     = var.yasn_cluster_name
+  cluster_version  = var.eks_version
 
-  vpc_id     = module.yasn_network.vpc_id
-  subnet_ids = module.yasn_network.private_subnet_ids
+  vpc_id           = module.yasn_network.vpc_id
+  subnet_ids       = module.yasn_network.private_subnet_ids
 
-  node_group_name = "yasn-ng"
-  instance_type   = var.eks_instance_type
+  node_group_name  = "yasn-ng"
+  instance_type    = var.eks_instance_type
 
-  desired_size = var.eks_desired_size
-  min_size     = var.eks_min_size
-  max_size     = var.eks_max_size
+  desired_size     = var.eks_desired_size
+  min_size         = var.eks_min_size
+  max_size         = var.eks_max_size
 
-  tags = var.tags
+  tags             = var.tags
 }
 
 ##########################################
@@ -71,11 +71,22 @@ module "yasn_ecr" {
 module "yasn_rds" {
   source = "./rds"
 
-  db_name     = var.rds_name
-  db_user     = var.rds_user
-  db_password = var.rds_password
+  db_name           = var.rds_name
+  db_user           = var.rds_user
+  db_password       = var.rds_password
   db_engine_version = var.rds_engine_version
 
-  subnet_ids = module.yasn_network.private_subnet_ids
-  vpc_id     = module.yasn_network.vpc_id
+  subnet_ids        = module.yasn_network.private_subnet_ids
+  vpc_id            = module.yasn_network.vpc_id
+}
+
+##########################################
+# API GATEWAY (NEWLY ADDED)
+##########################################
+
+module "yasn_api_gateway" {
+  source = "./api_gateway"
+
+  # This must match your api_gateway/variables.tf
+  backend_ingress_url = module.yasn_eks.backend_ingress_url
 }
