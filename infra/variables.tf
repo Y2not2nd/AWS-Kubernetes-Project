@@ -91,6 +91,12 @@ variable "rds_password" {
   sensitive = true
 }
 
+variable "rds_engine_version" {
+  type        = string
+  description = "PostgreSQL engine version for the RDS instance"
+  default     = "15.6"
+}
+
 ##########################################
 # TAGS
 ##########################################
