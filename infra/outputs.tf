@@ -9,3 +9,8 @@ output "rds_endpoint" {
 output "ecr_urls" {
   value = module.yasn_ecr.urls
 }
+
+output "backend_ingress_url" {
+  value = aws_lb.your_ingress_load_balancer.dns_name
+}
+
